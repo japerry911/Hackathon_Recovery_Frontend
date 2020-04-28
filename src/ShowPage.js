@@ -13,10 +13,16 @@ const ShowPage = ({ history, match }) => {
     const [data, setData] = useState([]);
     const [data2, setData2] = useState([]);
     const [date, setDate] = useState('');
+    const [dogUrl, setDogUrl] = useState('');
 
     useEffect(() => {
         axios.get(`http://localhost:4000/users/${id}`).then(
             response => setData(response.data.feelings),
+            error => console.log(error)
+        );
+
+        axios.get('https://dog.ceo/api/breeds/image/random').then(
+            response => setDogUrl(response.data.message),
             error => console.log(error)
         );
     }, [id]);
@@ -72,6 +78,11 @@ const ShowPage = ({ history, match }) => {
             </h1>
             <div>
                 <h4>How are you feeling today?</h4>
+                <img 
+                    src={dogUrl}
+                    alt='dog'
+                    style={{ width: '50%' }}
+                />
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                         <TextField 
