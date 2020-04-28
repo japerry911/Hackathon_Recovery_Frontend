@@ -14,6 +14,7 @@ const ShowPage = ({ history, match }) => {
     const [data2, setData2] = useState([]);
     const [date, setDate] = useState('');
     const [dogUrl, setDogUrl] = useState('');
+    const [validationStatus, setValidationStatus] = useState(false);
 
     useEffect(() => {
         axios.get(`http://localhost:4000/users/${id}`).then(
@@ -43,6 +44,30 @@ const ShowPage = ({ history, match }) => {
 
         setData2(tempArray);
     }, [data]);
+
+    useEffect(() => {
+        if (date && happiness && sadness & anger) {
+            if (date.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) {
+                if (happiness >= 0 && happiness <= 10) {
+                    if (sadness >= 0 && sadness <= 10) {
+                        if (anger >= 0 && anger <= 10) {
+                            setValidationStatus(true);
+                        } else {
+                            setValidationStatus(false);
+                        }
+                    } else {
+                        setValidationStatus(false);
+                    }
+                } else {
+                    setValidationStatus(false);
+                }
+            } else {
+                setValidationStatus(false);
+            }
+        } else {
+            setValidationStatus(false);
+        }
+    }, [date, happiness, sadness, anger]);
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -81,43 +106,50 @@ const ShowPage = ({ history, match }) => {
                 <img 
                     src={dogUrl}
                     alt='dog'
-                    style={{ width: '50%', borderRadius: 10 }}
+                    style={{ width: '50%', borderRadius: 10, height: '50%' }}
                 />
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                         <TextField 
                             type='text' 
-                            label='Date' 
-                            style={{ width: '10%' }} 
+                            label='Date (yyyy-MM-dd)' 
+                            style={{ width: '20%' }} 
                             value={date}
                             onChange={newDate => setDate(newDate.target.value)}
+                            error={!date.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)}
                         />
                         <TextField 
                             type='number' 
                             label='Happiness' 
-                            style={{ width: '10%' }} 
+                            style={{ width: '20%' }} 
                             value={happiness}
                             onChange={newHappiness => setHappiness(newHappiness.target.value)}
+                            error={happiness === '' || happiness > 10 || happiness < 0}
                         />
                         <TextField 
                             type='number' 
                             label='Sadness' 
-                            style={{ width: '10%' }} 
+                            style={{ width: '20%' }} 
                             value={sadness}
                             onChange={newSadness => setSadness(newSadness.target.value)}
+                            error={sadness === '' || sadness > 10 || sadness < 0}
                         />
                         <TextField 
                             type='number' 
                             label='Anger' 
-                            style={{ width: '10%' }} 
+                            style={{ width: '20%' }} 
                             value={anger}
                             onChange={newAnger => setAnger(newAnger.target.value)}
+                            error={anger === '' || anger > 10 || anger < 0}
                         />
-                        <Button style={{ border: '1pt solid black', marginTop: '1em', backgroundColor: 'red', opacity: 0.75 }} type='submit'>
+                        <Button 
+                            style={{ border: '1pt solid black', marginTop: '1em', backgroundColor: 'red', opacity: 0.75 }} type='submit'
+                            disabled={!validationStatus}
+                        >
                             Submit Feelings
                         </Button>
                     </form>
-                    <LineChart width={730} height={250} data={data2} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <LineChart width={730} height={250} data={data2} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
                         <CartesianAxis strokeDasharray='3 3' />
                         <XAxis dataKey='date' />
                         <YAxis />
