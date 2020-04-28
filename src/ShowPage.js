@@ -46,24 +46,12 @@ const ShowPage = ({ history, match }) => {
     }, [data]);
 
     useEffect(() => {
-        if (date && happiness && sadness & anger) {
-            if (date.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) {
-                if (happiness >= 0 && happiness <= 10) {
-                    if (sadness >= 0 && sadness <= 10) {
-                        if (anger >= 0 && anger <= 10) {
-                            setValidationStatus(true);
-                        } else {
-                            setValidationStatus(false);
-                        }
-                    } else {
-                        setValidationStatus(false);
-                    }
-                } else {
-                    setValidationStatus(false);
-                }
-            } else {
-                setValidationStatus(false);
-            }
+        if ((happiness >= 0 && happiness <= 10) &&
+        (date.match(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/)) && 
+        (happiness >= 0 && happiness <= 10) && 
+        (sadness >= 0 && sadness <= 10) &&
+        (anger >= 0 && anger <= 10)) {
+            setValidationStatus(true);
         } else {
             setValidationStatus(false);
         }
