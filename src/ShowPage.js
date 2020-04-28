@@ -81,7 +81,7 @@ const ShowPage = ({ history, match }) => {
                 <img 
                     src={dogUrl}
                     alt='dog'
-                    style={{ width: '50%' }}
+                    style={{ width: '50%', borderRadius: 10 }}
                 />
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
